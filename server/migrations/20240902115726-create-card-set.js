@@ -15,6 +15,7 @@ module.exports = {
           model: "Cards",
           key: "id",
         },
+        onDelete: "CASCADE",
       },
       set_name: {
         type: Sequelize.STRING,

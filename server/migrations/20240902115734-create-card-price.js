@@ -15,6 +15,7 @@ module.exports = {
           model: "Cards",
           key: "id",
         },
+        onDelete: "CASCADE",
       },
       cardmarket_price: {
         type: Sequelize.FLOAT,
