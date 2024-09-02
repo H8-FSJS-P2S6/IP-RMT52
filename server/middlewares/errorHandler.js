@@ -1,5 +1,5 @@
 module.exports = function errorHandler(err, req, res, next) {
-  // console.log("🚀 ~ errorHandler ~ err:", err);
+  console.log("🚀 ~ errorHandler ~ err:", err);
   switch (err.name) {
     case "SequelizeValidationError":
     case "SequelizeUniqueConstraintError":
@@ -21,6 +21,6 @@ module.exports = function errorHandler(err, req, res, next) {
       res.status(401).json({ message: "Invalid token" });
       return;
     default:
-      res.status(500).json({ message: "ISE" });
+      res.status(500).json({ message: "Internal Server Error" });
   }
 };
