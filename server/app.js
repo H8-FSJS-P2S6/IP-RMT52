@@ -22,7 +22,7 @@ app.use(authentication);
 app.get("/cards", CardController.getAllCard);
 app.post("/cards");
 
-app.get("/cards/:id");
+app.get("/cards/:id", CardController.getCardById);
 app.put("/cards/:id");
 
 app.delete("/cards/:id");
