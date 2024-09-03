@@ -118,7 +118,7 @@ class CardController {
 
   static async updateFavorite(req, res, next) {
     try {
-      const favorite = await Favorite.findByPk(req.params.id);
+      const favorite = await Favorite.findByPk(req.params.favoriteId);
       if (!favorite) {
         throw { name: "NotFound", message: "Favorite Card not found" };
       }
@@ -134,7 +134,7 @@ class CardController {
 
   static async deleteFavorite(req, res, next) {
     try {
-      const favorite = await Favorite.findByPk(req.params.id);
+      const favorite = await Favorite.findByPk(req.params.favoriteId);
       if (!favorite) {
         throw { name: "NotFound", message: "Favorite Card not found" };
       }
