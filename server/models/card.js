@@ -24,6 +24,7 @@ module.exports = (sequelize, DataTypes) => {
       def: DataTypes.INTEGER,
       level: DataTypes.INTEGER,
       race: DataTypes.STRING,
+      archetype: DataTypes.STRING,
       attribute: DataTypes.STRING,
       image_url: DataTypes.STRING,
       price: DataTypes.FLOAT,

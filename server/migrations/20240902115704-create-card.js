@@ -33,6 +33,9 @@ module.exports = {
       race: {
         type: Sequelize.STRING,
       },
+      archetype: {
+        type: Sequelize.STRING,
+      },
       attribute: {
         type: Sequelize.STRING,
       },

@@ -19,6 +19,7 @@ class CardController {
         def: card.def || null,
         level: card.level || null,
         race: card.race || null,
+        archetype: card.archetype || null,
         attribute: card.attribute || null,
         image_url: card.card_images[0]?.image_url || null,
         price: card.card_prices[0]?.cardmarket_price || null,
