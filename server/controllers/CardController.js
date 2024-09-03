@@ -97,7 +97,7 @@ class CardController {
         data.push(cardDetail);
       }
 
-      res.status(200).json(favorites);
+      res.status(200).json(data);
     } catch (err) {
       next(err);
     }
@@ -105,11 +105,18 @@ class CardController {
 
   static async createFavorite(req, res, next) {
     try {
+      const response = await axios.get(
+        `https://db.ygoprodeck.com/api/v7/cardinfo.php?id=${req.params.cardId}`
+      );
+      const card = response.data.data[0];
+      if (!card) {
+        throw { name: "NotFound", message: "Card not found" };
+      }
       const favorite = await Favorite.create({
         userId: req.user.id,
         cardId: req.params.cardId,
       });
-      
+
       res.status(200).json(favorite);
     } catch (err) {
       next(err);
