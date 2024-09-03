@@ -22,9 +22,10 @@ app.use(authentication);
 // Need login first to access
 app.get("/cards", CardController.getAllCard);
 
+app.get("/cards/favorite", CardController.getFavorites);
+
 app.get("/cards/:id", CardController.getCardById);
 
-app.get("/cards/favorite/", CardController.getFavorites);
 app.post("/cards/favorite/add/:cardId", CardController.createFavorite);
 app.put("/cards/favorite/edit/:favoriteId", CardController.updateFavorite);
 app.delete("/cards/favorite/delete/:favoriteId", CardController.deleteFavorite);

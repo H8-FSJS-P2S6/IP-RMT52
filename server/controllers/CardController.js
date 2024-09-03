@@ -72,7 +72,7 @@ class CardController {
         },
       });
       const data = [];
-      for (const favorite in favorites) {
+      for (const favorite of favorites) {
         const response = await axios.get(
           `https://db.ygoprodeck.com/api/v7/cardinfo.php?id=${favorite.cardId}`
         );
@@ -97,7 +97,7 @@ class CardController {
         data.push(cardDetail);
       }
 
-      res.status(200).json(data);
+      res.status(200).json(favorites);
     } catch (err) {
       next(err);
     }
@@ -109,7 +109,7 @@ class CardController {
         userId: req.user.id,
         cardId: req.params.cardId,
       });
-
+      
       res.status(200).json(favorite);
     } catch (err) {
       next(err);
