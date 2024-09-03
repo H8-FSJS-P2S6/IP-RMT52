@@ -1,10 +1,4 @@
-const {
-  test,
-  expect,
-  beforeAll,
-  afterAll,
-  describe,
-} = require("@jest/globals");
+const { test, expect, afterAll, describe } = require("@jest/globals");
 const request = require("supertest");
 const app = require("../app");
 const { User } = require("../models");
@@ -18,8 +12,8 @@ afterAll(async () => {
 });
 
 describe("User Routes Test", () => {
-  describe("Membuat testing untuk register (POST /register)", () => {
-    test("Berhasil register", async () => {
+  describe("POST /register - create new user", () => {
+    test("201 Success register - should create new User", async () => {
       const user = {
         username: "foresto",
         email: "forestoay@gmail.com",
@@ -32,7 +26,7 @@ describe("User Routes Test", () => {
       expect(response.body).toHaveProperty("email", user.email);
     });
 
-    test("Gagal register karena email tidak ada", async () => {
+    test("400 Failed register - should return error if email is null", async () => {
       const response = await request(app).post("/register").send({
         username: "test",
         password: "qweqwe",
@@ -42,7 +36,7 @@ describe("User Routes Test", () => {
       expect(response.body).toHaveProperty("message", "Email is required");
     });
 
-    test("Gagal register karena email tidak unik", async () => {
+    test("400 Failed register - should return error if email is already exists", async () => {
       const response = await request(app).post("/register").send({
         username: "awsd",
         email: "forestoay@gmail.com",
@@ -53,7 +47,7 @@ describe("User Routes Test", () => {
       expect(response.body).toHaveProperty("message", "Email must be unique");
     });
 
-    test("Gagal register karena salah format email", async () => {
+    test("400 Failed register - should return error if wrong email format", async () => {
       const response = await request(app).post("/register").send({
         username: "awsde",
         email: "forestoay123",
@@ -64,7 +58,7 @@ describe("User Routes Test", () => {
       expect(response.body).toHaveProperty("message", "Invalid email format");
     });
 
-    test("Gagal register karena password kurang dari 5 karakter", async () => {
+    test("400 Failed register - should return an error if the password has less than 5 characters", async () => {
       const response = await request(app).post("/register").send({
         username: "test",
         email: "test@gmail.com",
@@ -79,8 +73,8 @@ describe("User Routes Test", () => {
     });
   });
 
-  describe("Membuat testing untuk login (POST /login)", () => {
-    test("Berhasil login", async () => {
+  describe("POST /login - user login", () => {
+    test("200 Success login - should return access_token", async () => {
       const user = {
         username: "foresto",
         email: "forestoay@gmail.com",
@@ -92,7 +86,7 @@ describe("User Routes Test", () => {
       expect(response.body).toHaveProperty("access_token", expect.any(String));
     });
 
-    test("Gagal login karena salah email / password", async () => {
+    test("401 Failed login - invalid email or password", async () => {
       const response = await request(app).post("/login").send({
         email: "forestoay@gmail.com",
         password: "hahahehe",

@@ -61,8 +61,6 @@ class CardController {
 
       res.status(200).json(cardDetail);
     } catch (err) {
-      console.log(err.code, "<<<😀😀😀😀😀");
-      
       next(err);
     }
   }
