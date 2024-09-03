@@ -24,10 +24,10 @@ class UserController {
     const { email, password } = req.body;
     try {
       if (!email) {
-        throw { name: "BadRequest", message: "Email tidak boleh kosong" };
+        throw { name: "BadRequest", message: "Email is required" };
       }
       if (!password) {
-        throw { name: "BadRequest", message: "Password tidak boleh kosong" };
+        throw { name: "BadRequest", message: "Password is required" };
       }
       const user = await User.findOne({ where: { email } });
       if (!user) {

@@ -20,10 +20,10 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         validate: {
           notEmpty: {
-            msg: "Username tidak boleh kosong",
+            msg: "Username is required",
           },
           notNull: {
-            msg: "Username tidak boleh kosong",
+            msg: "Username is required",
           },
         },
       },
@@ -32,17 +32,17 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         unique: {
           name: "email",
-          msg: "Email harus unik",
+          msg: "Email must be unique",
         },
         validate: {
           notEmpty: {
-            msg: "Email tidak boleh kosong",
+            msg: "Email is required",
           },
           notNull: {
-            msg: "Email tidak boleh kosong",
+            msg: "Email is required",
           },
           isEmail: {
-            msg: "Harus dalam format email",
+            msg: "Invalid email format",
           },
         },
       },
@@ -51,10 +51,14 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         validate: {
           notEmpty: {
-            msg: "Password tidak boleh kosong",
+            msg: "Password is required",
           },
           notNull: {
-            msg: "Password tidak boleh kosong",
+            msg: "Password is required",
+          },
+          len: {
+            args: [5],
+            msg: "The password must have a minimum of 5 characters",
           },
         },
       },
