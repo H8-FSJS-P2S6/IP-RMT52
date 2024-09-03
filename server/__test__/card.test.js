@@ -48,8 +48,82 @@ describe("GET /cards", () => {
       .set("Authorization", `Bearer ${access_token}`);
 
     expect(response.status).toBe(200);
-    expect(Array.isArray(response.body)).toBeTruthy();
-    expect(response.body.length).toBeGreaterThan(0);
+    expect(response.body).toHaveProperty("totalCards", expect.any(Number));
+    expect(response.body).toHaveProperty("totalPages", expect.any(Number));
+    expect(response.body).toHaveProperty("currentPage", expect.any(Number));
+    expect(response.body).toHaveProperty("pageSize", expect.any(Number));
+    expect(Array.isArray(response.body.cards)).toBeTruthy();
+    expect(response.body.cards.length).toBeGreaterThan(0);
+  });
+
+  test("200 success get cards with archetype filter", async () => {
+    const response = await request(app)
+      .get("/cards?archetype=Sky Striker")
+      .set("Authorization", `Bearer ${access_token}`);
+
+    expect(response.status).toBe(200);
+    expect(response.body).toHaveProperty("totalCards", expect.any(Number));
+    expect(response.body).toHaveProperty("totalPages", expect.any(Number));
+    expect(response.body).toHaveProperty("currentPage", expect.any(Number));
+    expect(response.body).toHaveProperty("pageSize", expect.any(Number));
+    expect(Array.isArray(response.body.cards)).toBeTruthy();
+    expect(response.body.cards.length).toBeGreaterThan(0);
+  });
+
+  test("200 success get cards with search by name", async () => {
+    const response = await request(app)
+      .get("/cards?name=blue-eyes")
+      .set("Authorization", `Bearer ${access_token}`);
+
+    expect(response.status).toBe(200);
+    expect(response.body).toHaveProperty("totalCards", expect.any(Number));
+    expect(response.body).toHaveProperty("totalPages", expect.any(Number));
+    expect(response.body).toHaveProperty("currentPage", expect.any(Number));
+    expect(response.body).toHaveProperty("pageSize", expect.any(Number));
+    expect(Array.isArray(response.body.cards)).toBeTruthy();
+    expect(response.body.cards.length).toBeGreaterThan(0);
+  });
+
+  test("200 success get cards with search by name", async () => {
+    const response = await request(app)
+      .get("/cards?sort=desc")
+      .set("Authorization", `Bearer ${access_token}`);
+
+    expect(response.status).toBe(200);
+    expect(response.body).toHaveProperty("totalCards", expect.any(Number));
+    expect(response.body).toHaveProperty("totalPages", expect.any(Number));
+    expect(response.body).toHaveProperty("currentPage", expect.any(Number));
+    expect(response.body).toHaveProperty("pageSize", expect.any(Number));
+    expect(Array.isArray(response.body.cards)).toBeTruthy();
+    expect(response.body.cards.length).toBeGreaterThan(0);
+  });
+
+  test("200 success get cards with current pages", async () => {
+    const response = await request(app)
+      .get("/cards?page=5")
+      .set("Authorization", `Bearer ${access_token}`);
+
+    expect(response.status).toBe(200);
+    expect(response.body).toHaveProperty("totalCards", expect.any(Number));
+    expect(response.body).toHaveProperty("totalPages", expect.any(Number));
+    expect(response.body).toHaveProperty("currentPage", 5);
+    expect(response.body).toHaveProperty("pageSize", expect.any(Number));
+    expect(Array.isArray(response.body.cards)).toBeTruthy();
+    expect(response.body.cards.length).toBeGreaterThan(0);
+  });
+
+  test("200 success get cards with limit page size", async () => {
+    const response = await request(app)
+      .get("/cards?pageSize=5")
+      .set("Authorization", `Bearer ${access_token}`);
+
+    expect(response.status).toBe(200);
+    expect(response.body).toHaveProperty("totalCards", expect.any(Number));
+    expect(response.body).toHaveProperty("totalPages", expect.any(Number));
+    expect(response.body).toHaveProperty("currentPage", expect.any(Number));
+    expect(response.body).toHaveProperty("pageSize", 5);
+    expect(Array.isArray(response.body.cards)).toBeTruthy();
+    expect(response.body.cards.length).toBe(5);
   });
 
   test("401 get cards with invalid token", async () => {
@@ -224,6 +298,31 @@ describe("DELETE /cards/favorite/delete/:favoriteId", () => {
   test("401 PUT favorite card with invalid token", async () => {
     const response = await request(app)
       .delete("/cards/favorite/delete/1")
+      .set(
+        "Authorization",
+        `Bearer ${access_token.substring(1, access_token.length)}`
+      );
+
+    expect(response.status).toBe(401);
+    expect(response.body).toHaveProperty("message", "Invalid token");
+  });
+});
+
+describe("GET /archetype", () => {
+  test("200 success get archetype", async () => {
+    const response = await request(app)
+      .get("/archetype")
+      .set("Authorization", `Bearer ${access_token}`);
+
+    expect(response.status).toBe(200);
+    expect(Array.isArray(response.body)).toBeTruthy();
+    expect(response.body[0]).toHaveProperty("name", expect.any(String));
+    expect(response.body.length).toBeGreaterThan(0);
+  });
+
+  test("401 get archetype with invalid token", async () => {
+    const response = await request(app)
+      .get("/archetype")
       .set(
         "Authorization",
         `Bearer ${access_token.substring(1, access_token.length)}`

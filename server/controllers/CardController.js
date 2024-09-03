@@ -4,12 +4,47 @@ const axios = require("axios");
 class CardController {
   static async getAllCard(req, res, next) {
     try {
+      const {
+        query: { archetype, name, sort = "asc", page = 1, pageSize = 10 },
+      } = req;
+
       const response = await axios.get(
         "https://db.ygoprodeck.com/api/v7/cardinfo.php"
       );
-      const cardsFromApi = response.data.data;
+      let cardsFromApi = response.data.data;
 
-      const processedCards = cardsFromApi.map((card) => ({
+      // Filter by archetype if provided
+      if (archetype) {
+        cardsFromApi = cardsFromApi.filter(
+          (card) => card.archetype === archetype
+        );
+      }
+
+      // Search by name if provided
+      if (name) {
+        cardsFromApi = cardsFromApi.filter((card) =>
+          card.name.toLowerCase().includes(name.toLowerCase())
+        );
+      }
+
+      // Sort by level if provided
+      if (sort === "asc") {
+        cardsFromApi.sort((a, b) => (a.level || 0) - (b.level || 0));
+      } else if (sort === "desc") {
+        cardsFromApi.sort((a, b) => (b.level || 0) - (a.level || 0));
+      }
+
+      // Pagination
+      const pageNumber = parseInt(page, 10) || 1;
+      const pageSizeNumber = parseInt(pageSize, 10) || 10;
+      const totalCards = cardsFromApi.length;
+      const offset = (pageNumber - 1) * pageSizeNumber;
+      const paginatedCards = cardsFromApi.slice(
+        offset,
+        offset + pageSizeNumber
+      );
+
+      const processedCards = paginatedCards.map((card) => ({
         id: card.id,
         name: card.name,
         type: card.type,
@@ -25,7 +60,13 @@ class CardController {
         price: card.card_prices[0]?.cardmarket_price || null,
       }));
 
-      res.status(200).json(processedCards);
+      res.status(200).json({
+        totalCards,
+        totalPages: Math.ceil(totalCards / pageSizeNumber),
+        currentPage: pageNumber,
+        pageSize: pageSizeNumber,
+        cards: processedCards,
+      });
     } catch (err) {
       next(err);
     }
@@ -106,13 +147,9 @@ class CardController {
 
   static async createFavorite(req, res, next) {
     try {
-      const response = await axios.get(
+      await axios.get(
         `https://db.ygoprodeck.com/api/v7/cardinfo.php?id=${req.params.cardId}`
       );
-      const card = response.data.data[0];
-      if (!card) {
-        throw { name: "NotFound", message: "Card not found" };
-      }
       const favorite = await Favorite.create({
         userId: req.user.id,
         cardId: req.params.cardId,
@@ -149,6 +186,21 @@ class CardController {
       await favorite.destroy();
 
       res.status(200).json({ message: "Favorite Card deleted" });
+    } catch (err) {
+      next(err);
+    }
+  }
+
+  static async getCardArchetype(req, res, next) {
+    try {
+      const response = await axios.get(
+        "https://db.ygoprodeck.com/api/v7/archetypes.php"
+      );
+
+      let archetypeApi = response.data.map((archetype) => ({
+        name: archetype.archetype_name,
+      }));
+      res.status(200).json(archetypeApi);
     } catch (err) {
       next(err);
     }

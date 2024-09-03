@@ -30,6 +30,8 @@ app.post("/cards/favorite/add/:cardId", CardController.createFavorite);
 app.put("/cards/favorite/edit/:favoriteId", CardController.updateFavorite);
 app.delete("/cards/favorite/delete/:favoriteId", CardController.deleteFavorite);
 
+app.get("/archetype", CardController.getCardArchetype);
+
 app.use(errorHandler);
 
 module.exports = app;

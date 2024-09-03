@@ -26,6 +26,26 @@ describe("User Routes Test", () => {
       expect(response.body).toHaveProperty("email", user.email);
     });
 
+    test("400 Failed register - should return error if username is null", async () => {
+      const response = await request(app).post("/register").send({
+        email: "testing@gmail.com",
+        password: "123456",
+      });
+
+      expect(response.status).toBe(400);
+      expect(response.body).toHaveProperty("message", "Username is required");
+    });
+
+    test("400 Failed register - should return error if password is null", async () => {
+      const response = await request(app).post("/register").send({
+        username: "test",
+        email: "testing@gmail.com",
+      });
+
+      expect(response.status).toBe(400);
+      expect(response.body).toHaveProperty("message", "Password is required");
+    });
+
     test("400 Failed register - should return error if email is null", async () => {
       const response = await request(app).post("/register").send({
         username: "test",
@@ -84,6 +104,37 @@ describe("User Routes Test", () => {
 
       expect(response.status).toBe(200);
       expect(response.body).toHaveProperty("access_token", expect.any(String));
+    });
+
+    test("401 Failed login - email is empty", async () => {
+      const response = await request(app).post("/login").send({
+        password: "hahahehe",
+      });
+
+      expect(response.status).toBe(400);
+      expect(response.body).toHaveProperty("message", "Email is required");
+    });
+
+    test("401 Failed login - password is empty", async () => {
+      const response = await request(app).post("/login").send({
+        email: "forestoay23@gmail.com",
+      });
+
+      expect(response.status).toBe(400);
+      expect(response.body).toHaveProperty("message", "Password is required");
+    });
+
+    test("401 Failed login - invalid email or password", async () => {
+      const response = await request(app).post("/login").send({
+        email: "forestoay23@gmail.com",
+        password: "hahahehe",
+      });
+
+      expect(response.status).toBe(401);
+      expect(response.body).toHaveProperty(
+        "message",
+        "Invalid email or password"
+      );
     });
 
     test("401 Failed login - invalid email or password", async () => {
