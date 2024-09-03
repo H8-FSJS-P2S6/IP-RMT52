@@ -18,10 +18,6 @@ module.exports = {
       },
       cardId: {
         type: Sequelize.INTEGER,
-        references: {
-          model: "Cards",
-          key: "id",
-        },
       },
       stock: {
         type: Sequelize.INTEGER,

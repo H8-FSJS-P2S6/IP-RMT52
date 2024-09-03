@@ -9,7 +9,6 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Favorite.belongsTo(models.Card, { foreignKey: "cardId" });
       Favorite.belongsTo(models.User, { foreignKey: "userId" });
     }
   }

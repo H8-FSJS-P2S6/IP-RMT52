@@ -18,14 +18,16 @@ app.post("/register", UserController.register);
 app.post("/login", UserController.login);
 
 app.use(authentication);
-//
+
+// Need login first to access
 app.get("/cards", CardController.getAllCard);
-app.post("/cards");
 
 app.get("/cards/:id", CardController.getCardById);
-app.put("/cards/:id");
 
-app.delete("/cards/:id");
+app.get("/cards/favorite/", CardController.getFavorites);
+app.post("/cards/favorite/add/:cardId", CardController.createFavorite);
+app.put("/cards/favorite/edit/:favoriteId", CardController.updateFavorite);
+app.delete("/cards/favorite/delete/:favoriteId", CardController.deleteFavorite);
 
 app.use(errorHandler);
 
