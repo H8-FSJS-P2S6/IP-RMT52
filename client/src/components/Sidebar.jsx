@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
 import { GiCardPlay } from "react-icons/gi";
 import { MdFavorite } from "react-icons/md";
-import { TbNumber123 } from "react-icons/tb";
 import { IoLogoGameControllerB } from "react-icons/io";
 
 export default function Sidebar() {
@@ -31,20 +30,14 @@ export default function Sidebar() {
               </p>
             </li>
           </Link>
-          <li>
-            <p className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
-              <TbNumber123 />
-              <span className="flex-1 ms-3 whitespace-nowrap">Combo</span>
-            </p>
-          </li>
-          <li>
-            <p className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
-              <IoLogoGameControllerB />
-              <span className="flex-1 ms-3 whitespace-nowrap">
-                Minigames (soon)
-              </span>
-            </p>
-          </li>
+          <Link to={"/minigames"}>
+            <li>
+              <p className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                <IoLogoGameControllerB />
+                <span className="flex-1 ms-3 whitespace-nowrap">Minigames</span>
+              </p>
+            </li>
+          </Link>
         </ul>
       </div>
     </aside>
