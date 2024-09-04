@@ -7,7 +7,7 @@ export default function RootLayout() {
     <>
       <Navbar />
       {localStorage.getItem("access_token") && <Sidebar />}
-      <div className="container w-full mt-16 sm:pl-64">
+      <div className="container-2xl w-full mt-16 sm:pl-64 min-w-[524px]">
         <Outlet />
       </div>
     </>
