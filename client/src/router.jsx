@@ -6,6 +6,7 @@ import CardPage from "./pages/CardPage";
 import CardDetailPage from "./pages/CardDetailPage";
 import FavoritePage from "./pages/FavoritePage";
 import EditFavorite from "./pages/EditFavorite";
+import MinigamesPage from "./pages/MinigamesPage";
 
 export const router = createBrowserRouter([
   {
@@ -62,6 +63,10 @@ export const router = createBrowserRouter([
       {
         path: "/cards/favorite/edit/:favoriteId",
         element: <EditFavorite />,
+      },
+      {
+        path: "/minigames",
+        element: <MinigamesPage />,
       },
     ],
   },
