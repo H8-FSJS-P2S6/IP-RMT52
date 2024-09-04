@@ -121,6 +121,7 @@ class CardController {
         const card = response.data.data[0];
 
         const cardDetail = {
+          favoriteId: favorite.id,
           id: card.id,
           name: card.name,
           type: card.type,
