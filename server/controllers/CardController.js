@@ -149,9 +149,21 @@ class CardController {
 
   static async createFavorite(req, res, next) {
     try {
-      await axios.get(
+      const response = await axios.get(
         `https://db.ygoprodeck.com/api/v7/cardinfo.php?id=${req.params.cardId}`
       );
+      const responseServer = response.data.data[0];
+      const sameCard = await Favorite.findOne({
+        where: {
+          cardId: responseServer.id,
+        },
+      });
+      if (sameCard) {
+        throw {
+          name: "Forbidden",
+          message: "Can't add same card to favorites",
+        };
+      }
       const favorite = await Favorite.create({
         userId: req.user.id,
         cardId: req.params.cardId,
