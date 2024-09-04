@@ -44,6 +44,12 @@ export default function CardDetailPage() {
           },
         }
       );
+      Swal.fire({
+        icon: "success",
+        title: "Added to favorites",
+        showConfirmButton: false,
+        timer: 1500,
+      });
       navigate("/cards/favorite");
     } catch (err) {
       Swal.fire({
