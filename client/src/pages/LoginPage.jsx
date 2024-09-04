@@ -15,9 +15,8 @@ export default function LoginPage() {
         email,
         password,
       });
-      
+
       localStorage.setItem("access_token", response.data.access_token);
-      console.log(response.data, "<<< response data");
       const Toast = Swal.mixin({
         toast: true,
         position: "top-end",
