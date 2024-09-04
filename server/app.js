@@ -33,6 +33,7 @@ app.put("/cards/favorite/edit/:favoriteId", CardController.updateFavorite);
 app.delete("/cards/favorite/delete/:favoriteId", CardController.deleteFavorite);
 
 app.get("/archetype", CardController.getCardArchetype);
+app.get("/randomcard", CardController.randomCard);
 
 app.use(errorHandler);
 

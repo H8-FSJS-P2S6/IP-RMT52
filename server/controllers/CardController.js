@@ -207,6 +207,35 @@ class CardController {
       next(err);
     }
   }
+
+  static async randomCard(req, res, next) {
+    try {
+      const response = await axios.get(
+        "https://db.ygoprodeck.com/api/v7/randomcard.php"
+      );
+
+      const randomCard = response.data.data[0];
+
+      const guessRandomCard = {
+        name: randomCard.name,
+        type: randomCard.type,
+        frameType: randomCard.frameType,
+        race: randomCard.race,
+        desc: randomCard.desc,
+        archetype: randomCard.archetype,
+        card_images: randomCard.card_images[0].image_url_cropped,
+        cardtype: randomCard.humanReadableCardType,
+        atk: randomCard.atk || null,
+        def: randomCard.def || null,
+        level: randomCard.level || null,
+        attribute: randomCard.attribute || null,
+        rarity: randomCard.card_sets[0].set_rarity || null,
+      };
+      res.status(200).json(guessRandomCard);
+    } catch (err) {
+      next(err);
+    }
+  }
 }
 
 module.exports = CardController;
