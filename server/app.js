@@ -9,9 +9,11 @@ const CardController = require("./controllers/CardController");
 const authentication = require("./middlewares/authentication");
 
 const app = express();
+const cors = require("cors");
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(cors());
 
 // Register & Login
 app.post("/register", UserController.register);
