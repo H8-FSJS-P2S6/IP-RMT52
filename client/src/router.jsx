@@ -3,6 +3,8 @@ import RegisterPage from "./pages/RegisterPage";
 import RootLayout from "./layouts/RootLayout";
 import LoginPage from "./pages/LoginPage";
 import CardPage from "./pages/CardPage";
+import CardDetailPage from "./pages/CardDetailPage";
+import FavoritePage from "./pages/FavoritePage";
 
 export const router = createBrowserRouter([
   {
@@ -16,6 +18,13 @@ export const router = createBrowserRouter([
       return null;
     },
     children: [
+      {
+        path: "/",
+        index: true,
+        loader: () => {
+          throw redirect("/login");
+        },
+      },
       {
         path: "/register",
         element: <RegisterPage />,
@@ -40,6 +49,14 @@ export const router = createBrowserRouter([
       {
         path: "/cards",
         element: <CardPage />,
+      },
+      {
+        path: "/cards/:cardId",
+        element: <CardDetailPage />,
+      },
+      {
+        path: "/cards/favorite",
+        element: <FavoritePage />,
       },
     ],
   },
