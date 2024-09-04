@@ -122,6 +122,7 @@ class CardController {
 
         const cardDetail = {
           favoriteId: favorite.id,
+          stock: favorite.stock,
           id: card.id,
           name: card.name,
           type: card.type,
