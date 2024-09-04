@@ -13,7 +13,7 @@ export const router = createBrowserRouter([
     loader: () => {
       const access_token = localStorage.getItem("access_token");
       if (access_token) {
-        throw redirect("/");
+        throw redirect("/cards");
       }
       return null;
     },
