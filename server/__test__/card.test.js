@@ -332,3 +332,29 @@ describe("GET /archetype", () => {
     expect(response.body).toHaveProperty("message", "Invalid token");
   });
 });
+
+describe("GET /randomcard", () => {
+  test("200 success get randomcard", async () => {
+    const response = await request(app)
+      .get("/randomcard")
+      .set("Authorization", `Bearer ${access_token}`);
+
+    expect(response.status).toBe(200);
+    expect(response.body).toHaveProperty("name", expect.any(String));
+    expect(response.body).toHaveProperty("frameType", expect.any(String));
+    expect(response.body).toHaveProperty("type", expect.any(String));
+    expect(response.body).toHaveProperty("desc", expect.any(String));
+  });
+
+  test("401 get archetype with invalid token", async () => {
+    const response = await request(app)
+      .get("/randomcard")
+      .set(
+        "Authorization",
+        `Bearer ${access_token.substring(1, access_token.length)}`
+      );
+
+    expect(response.status).toBe(401);
+    expect(response.body).toHaveProperty("message", "Invalid token");
+  });
+});
