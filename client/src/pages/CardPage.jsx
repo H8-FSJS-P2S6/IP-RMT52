@@ -56,7 +56,7 @@ export default function CardPage() {
       Swal.fire({
         icon: "error",
         title: "Oops...",
-        text: err.response?.data?.message || "An error occurred",
+        text: err.response.data.message,
       });
       console.log(err, "<<< e - fetchCards");
     }
@@ -78,7 +78,7 @@ export default function CardPage() {
       Swal.fire({
         icon: "error",
         title: "Oops...",
-        text: err.response?.data?.message || "An error occurred",
+        text: err.response.data.message,
       });
       console.log(err, "<<< e - fetchArchetypes");
     }

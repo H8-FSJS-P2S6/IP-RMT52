@@ -40,7 +40,7 @@ export default function LoginPage() {
       Swal.fire({
         icon: "error",
         title: "Oops...",
-        text: err.response.data.error,
+        text: err.response.data.message,
       });
     }
   };
