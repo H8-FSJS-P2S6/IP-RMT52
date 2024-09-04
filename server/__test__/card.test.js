@@ -195,6 +195,18 @@ describe("POST /cards/favorite/add/:cardId", () => {
     expect(response.body).toHaveProperty("stock", 0);
   });
 
+  test("403 can't POST the same card to favorite", async () => {
+    const response = await request(app)
+      .post("/cards/favorite/add/23771716")
+      .set("Authorization", `Bearer ${access_token}`);
+
+    expect(response.status).toBe(403);
+    expect(response.body).toHaveProperty(
+      "message",
+      "Can't add same card to favorites"
+    );
+  });
+
   test("400 post favorite card with invalid card id", async () => {
     const response = await request(app)
       .post("/cards/favorite/add/2")
