@@ -16,7 +16,22 @@ module.exports = (sequelize, DataTypes) => {
     {
       userId: DataTypes.INTEGER,
       cardId: DataTypes.INTEGER,
-      stock: DataTypes.INTEGER,
+      stock: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        validate: {
+          notEmpty: {
+            msg: "Stock is required",
+          },
+          notNull: {
+            msg: "Stock is required",
+          },
+          min: {
+            args: [0],
+            msg: "Stock cannot be negative",
+          },
+        },
+      },
     },
     {
       sequelize,
