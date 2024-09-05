@@ -35,7 +35,7 @@ app.delete("/cards/favorite/delete/:favoriteId", CardController.deleteFavorite);
 app.get("/archetype", CardController.getCardArchetype);
 app.get("/randomcard", CardController.randomCard);
 
-app.post("/minigames", CardController.minigames);
+app.get("/minigames", CardController.minigames);
 
 app.use(errorHandler);
 
