@@ -88,7 +88,7 @@ export default function CardPage() {
     fetchArchetypes();
   }, []);
 
-  // Debounce search input
+  // Debounce
   useEffect(() => {
     const handler = setTimeout(() => {
       setDebouncedSearch(search);
@@ -103,10 +103,10 @@ export default function CardPage() {
     fetchCards();
   }, [debouncedSearch, sort, page, archetype]);
 
-  // Pagination siblings logic
+  // Pagination
   const getPaginationRange = () => {
     const { currentPage, totalPages } = cards.pagination;
-    const siblings = 2; // Number of page numbers to show around the current page
+    const siblings = 2;
     const range = [];
 
     if (totalPages <= siblings * 2 + 1) {
