@@ -3,10 +3,10 @@ import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 import { useDispatch, useSelector } from "react-redux";
-import { setFavorites } from "../features/card/favoriteSlice";
+import { setFavorites } from "../features/card/favoritesSlice";
 
 export default function FavoritePage() {
-  const favorites = useSelector((state) => state.favorite.favorites);
+  const favorites = useSelector((state) => state.favorites.favorites);
   const dispatch = useDispatch();
 
   const fetchFavorites = async () => {

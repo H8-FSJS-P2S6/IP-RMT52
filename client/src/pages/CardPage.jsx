@@ -3,8 +3,8 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { setArchetypes } from "../features/card/archetypeSlice";
-import { setCards } from "../features/card/cardSlice";
+import { setArchetypes } from "../features/card/archetypesSlice";
+import { setCards } from "../features/card/cardsSlice";
 
 export default function CardPage() {
   const [search, setSearch] = useState("");
@@ -13,9 +13,9 @@ export default function CardPage() {
   const [page, setPage] = useState(1);
 
   // Pemakaian redux
-  const cards = useSelector((state) => state.card.cards);
-  const pagination = useSelector((state) => state.card.pagination);
-  const archetypes = useSelector((state) => state.archetype.archetypes);
+  const cards = useSelector((state) => state.cards.cards);
+  const pagination = useSelector((state) => state.cards.pagination);
+  const archetypes = useSelector((state) => state.archetypes.archetypes);
 
   const dispatch = useDispatch();
   const [debouncedSearch, setDebouncedSearch] = useState(search);
