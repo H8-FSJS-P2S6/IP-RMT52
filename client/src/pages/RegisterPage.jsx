@@ -39,7 +39,11 @@ export default function RegisterPage() {
         <div className="text-center text-2xl font-bold text-neutral-600 dark:text-neutral-300">
           <p className="">Register Page</p>
         </div>
-        <form className="max-w-md mx-auto" onSubmit={handleOnRegister}>
+        <form
+          className="max-w-md mx-auto"
+          onSubmit={handleOnRegister}
+          autoComplete="off"
+        >
           <div className="relative z-0 w-full mb-5 group">
             <input
               type="text"
