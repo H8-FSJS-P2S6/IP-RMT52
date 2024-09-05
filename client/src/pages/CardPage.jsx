@@ -2,26 +2,26 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { setArchetypes } from "../features/card/archetypeSlice";
+import { setCards } from "../features/card/cardSlice";
 
 export default function CardPage() {
   const [search, setSearch] = useState("");
   const [archetype, setArchetype] = useState("");
   const [sort, setSort] = useState("DESC");
   const [page, setPage] = useState(1);
-  const [cards, setCards] = useState({
-    cards: [],
-    pagination: {
-      currentPage: 1,
-      totalPages: 1,
-      totalRows: 0,
-    },
-  });
-  const [archetypes, setArchetypes] = useState([]);
+
+  // Pemakaian redux
+  const cards = useSelector((state) => state.card.cards);
+  const pagination = useSelector((state) => state.card.pagination);
+  const archetypes = useSelector((state) => state.archetype.archetypes);
+
+  const dispatch = useDispatch();
   const [debouncedSearch, setDebouncedSearch] = useState(search);
 
   const BASE_URL = "https://yugioh.forestoay.xyz/";
 
-  // Fetch cards based on debounced search
   const fetchCards = async () => {
     const url = new URL(BASE_URL);
     url.pathname = "/cards";
@@ -44,14 +44,16 @@ export default function CardPage() {
         },
       });
 
-      setCards({
-        cards: response.data.cards,
-        pagination: {
-          currentPage: response.data.currentPage,
-          totalPages: response.data.totalPages,
-          totalRows: response.data.totalCards,
-        },
-      });
+      dispatch(
+        setCards({
+          cards: response.data.cards,
+          pagination: {
+            currentPage: response.data.currentPage,
+            totalPages: response.data.totalPages,
+            totalRows: response.data.totalCards,
+          },
+        })
+      );
     } catch (err) {
       Swal.fire({
         icon: "error",
@@ -73,7 +75,7 @@ export default function CardPage() {
         },
       });
 
-      setArchetypes(response.data);
+      dispatch(setArchetypes(response.data));
     } catch (err) {
       Swal.fire({
         icon: "error",
@@ -105,7 +107,7 @@ export default function CardPage() {
 
   // Pagination
   const getPaginationRange = () => {
-    const { currentPage, totalPages } = cards.pagination;
+    const { currentPage, totalPages } = pagination;
     const siblings = 2;
     const range = [];
 
@@ -185,8 +187,8 @@ export default function CardPage() {
 
       {/* Card List */}
       <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 w-full">
-        {cards.cards.length > 0 ? (
-          cards.cards.map((card) => (
+        {cards.length > 0 ? (
+          cards.map((card) => (
             <div key={card.id} className="flex">
               <Link to={`/cards/${card.id}`}>
                 <img
@@ -209,7 +211,7 @@ export default function CardPage() {
       >
         <ul className="flex items-center space-x-2">
           {/* Previous Button */}
-          {page > 1 && (
+          {pagination.currentPage > 1 && (
             <li className="dark:text-neutral-300">
               <button
                 onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
@@ -233,29 +235,27 @@ export default function CardPage() {
               );
             }
             return (
-              <li key={index}>
-                <button
-                  onClick={() => setPage(item)}
-                  className={`px-4 py-2 border border-gray-300 rounded-md dark:text-neutral-300 ${
-                    item === page ? "bg-blue-500 text-white" : ""
-                  }`}
-                >
-                  {item}
-                </button>
+              <li
+                key={index}
+                className={`px-4 py-2 border border-gray-300 rounded-md ${
+                  item === pagination.currentPage
+                    ? "bg-blue-500 text-white"
+                    : "dark:text-neutral-300"
+                }`}
+              >
+                <button onClick={() => setPage(item)}>{item}</button>
               </li>
             );
           })}
 
           {/* Next Button */}
-          {page < cards.pagination.totalPages && (
-            <li>
+          {pagination.currentPage < pagination.totalPages && (
+            <li className="dark:text-neutral-300">
               <button
                 onClick={() =>
-                  setPage((prev) =>
-                    Math.min(prev + 1, cards.pagination.totalPages)
-                  )
+                  setPage((prev) => Math.min(prev + 1, pagination.totalPages))
                 }
-                className="px-4 py-2 border border-gray-300 rounded-md dark:text-neutral-300"
+                className="px-4 py-2 border border-gray-300 rounded-md"
               >
                 Next
               </button>
