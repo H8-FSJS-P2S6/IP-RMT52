@@ -1,14 +1,16 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { cardSlice } from "./features/card/cardSlice";
-import { archetypeSlice } from "./features/card/archetypeSlice";
+import { cardsSlice } from "./features/card/cardsSlice";
+import { archetypesSlice } from "./features/card/archetypesSlice";
 import { quizSlice } from "./features/quiz/quizSlice";
-import { favoriteSlice } from "./features/card/favoriteSlice";
+import { favoritesSlice } from "./features/card/favoritesSlice";
+import { cardSlice } from "./features/card/cardSlice.js";
 
 export const store = configureStore({
   reducer: {
-    card: cardSlice.reducer,
-    archetype: archetypeSlice.reducer,
+    cards: cardsSlice.reducer,
+    archetypes: archetypesSlice.reducer,
     quiz: quizSlice.reducer,
-    favorite: favoriteSlice.reducer,
+    favorites: favoritesSlice.reducer,
+    card: cardSlice.reducer,
   },
 });

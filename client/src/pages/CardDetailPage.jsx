@@ -1,11 +1,15 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { baseUrl } from "../helper/baseUrl";
 import Swal from "sweetalert2";
+import { useDispatch, useSelector } from "react-redux";
+import { setCard } from "../features/card/cardSlice.js";
 
 export default function CardDetailPage() {
   const { cardId } = useParams();
-  const [card, setCard] = useState(null);
+  // const [card, setCard] = useState(null);
+  const card = useSelector((state) => state.card.card);
+  const dispath = useDispatch();
   const navigate = useNavigate();
 
   const fetchCardById = async () => {
@@ -16,7 +20,7 @@ export default function CardDetailPage() {
         },
       });
 
-      setCard(response.data);
+      dispath(setCard(response.data));
     } catch (err) {
       Swal.fire({
         icon: "error",
