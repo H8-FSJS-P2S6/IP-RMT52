@@ -18,6 +18,7 @@ app.use(cors());
 // Register & Login
 app.post("/register", UserController.register);
 app.post("/login", UserController.login);
+app.post("/login/google", UserController.googleLogin);
 
 app.use(authentication);
 
