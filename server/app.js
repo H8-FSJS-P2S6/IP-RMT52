@@ -26,6 +26,7 @@ app.use(authentication);
 app.get("/cards", CardController.getAllCard);
 
 app.get("/cards/favorite", CardController.getFavorites);
+app.get("/cards/favorite/:id", CardController.getOneFavorite);
 
 app.get("/cards/:id", CardController.getCardById);
 

@@ -148,6 +148,23 @@ class CardController {
     }
   }
 
+  static async getOneFavorite(req, res, next) {
+    try {
+      const favorite = await Favorite.findOne({
+        where: {
+          id: req.params.id,
+          userId: req.user.id,
+        },
+      });
+      if (!favorite) {
+        throw { name: "NotFound", message: "Favorite Card not found" };
+      }
+      res.status(200).json(favorite);
+    } catch (err) {
+      next(err);
+    }
+  }
+
   static async createFavorite(req, res, next) {
     try {
       const response = await axios.get(
