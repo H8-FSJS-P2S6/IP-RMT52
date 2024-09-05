@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { baseUrl } from "../helper/baseUrl";
 import Swal from "sweetalert2";
@@ -7,6 +7,30 @@ export default function EditFavorite() {
   const [stock, setStock] = useState("");
   const { favoriteId } = useParams();
   const navigate = useNavigate();
+
+  const populateStock = async () => {
+    try {
+      const response = await baseUrl.get(`/cards/favorite/${favoriteId}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+        },
+      });
+      console.log(response.data);
+
+      setStock(response.data.stock);
+    } catch (err) {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: err.response.data.message,
+      });
+      console.log(err, "<<< err - populateStock");
+    }
+  };
+
+  useEffect(() => {
+    populateStock();
+  }, []);
 
   const handleOnUpdate = async (e) => {
     e.preventDefault();
