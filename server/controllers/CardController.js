@@ -276,6 +276,7 @@ class CardController {
       const hint = await openAI(guessRandomCard);
       res.status(200).json({
         hint,
+        cardName: guessRandomCard.name,
         cardImage: guessRandomCard.card_images,
       });
     } catch (err) {
