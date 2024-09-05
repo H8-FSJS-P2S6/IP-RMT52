@@ -64,7 +64,7 @@ export default function LoginPage() {
     });
     Toast.fire({
       icon: "success",
-      title: `Signed in successfully as ${email}`,
+      title: `Signed in successfully with Google`,
     });
 
     navigate("/cards");
