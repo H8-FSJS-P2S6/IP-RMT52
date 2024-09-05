@@ -1,15 +1,18 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { baseUrl } from "../helper/baseUrl";
 import { useDispatch, useSelector } from "react-redux";
-import { setQuiz } from "../features/quiz/quizSlice";
+import {
+  setFeedback,
+  setGuess,
+  setQuiz,
+  toggleHintVisibility,
+} from "../features/quiz/quizSlice";
 
 export default function MinigamesPage() {
-  const quiz = useSelector((state) => state.quiz.quiz);
+  const { quiz, guess, feedback, hintVisible } = useSelector(
+    (state) => state.quiz
+  );
   const dispatch = useDispatch();
-
-  const [guess, setGuess] = useState("");
-  const [feedback, setFeedback] = useState("");
-  const [hintVisible, setHintVisible] = useState(false);
 
   const fetchQuiz = async () => {
     try {
@@ -30,15 +33,15 @@ export default function MinigamesPage() {
 
   const handleSubmit = () => {
     if (guess.trim().toLowerCase() === quiz.cardName.toLowerCase()) {
-      setFeedback("Correct! Well done.");
+      dispatch(setFeedback("Correct! Well done."));
     } else {
-      setFeedback("Incorrect. Try again!");
+      dispatch(setFeedback("Incorrect. Try again!"));
     }
-    setGuess("");
+    dispatch(setGuess(""));
   };
 
-  const toggleHintVisibility = () => {
-    setHintVisible(!hintVisible);
+  const toggleHint = () => {
+    dispatch(toggleHintVisibility());
   };
 
   if (!quiz) return <p>Loading...</p>;
@@ -56,7 +59,7 @@ export default function MinigamesPage() {
         />
       </div>
       <button
-        onClick={toggleHintVisibility}
+        onClick={toggleHint}
         className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 mb-4"
       >
         {hintVisible ? "Hide Hint" : "Show Hint"}
@@ -67,7 +70,7 @@ export default function MinigamesPage() {
       <input
         type="text"
         value={guess}
-        onChange={(e) => setGuess(e.target.value)}
+        onChange={(e) => dispatch(setGuess(e.target.value))}
         placeholder="Enter your guess"
         className="p-2 border border-gray-300 rounded-md w-full mb-2"
       />

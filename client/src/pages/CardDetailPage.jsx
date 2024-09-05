@@ -7,7 +7,7 @@ import { setCard } from "../features/card/cardSlice.js";
 
 export default function CardDetailPage() {
   const { cardId } = useParams();
-  const card = useSelector((state) => state.card.card);
+  const { card } = useSelector((state) => state.card);
   const dispath = useDispatch();
   const navigate = useNavigate();
 

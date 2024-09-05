@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setFavorites } from "../features/card/favoritesSlice";
 
 export default function FavoritePage() {
-  const favorites = useSelector((state) => state.favorites.favorites);
+  const { favorites } = useSelector((state) => state.favorites);
   const dispatch = useDispatch();
 
   const fetchFavorites = async () => {

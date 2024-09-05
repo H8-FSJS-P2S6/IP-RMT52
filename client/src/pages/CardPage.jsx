@@ -5,17 +5,21 @@ import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { setArchetypes } from "../features/card/archetypesSlice";
 import { setCards } from "../features/card/cardsSlice";
+import {
+  setArchetype,
+  setPage,
+  setSearch,
+  setSort,
+} from "../features/card/filterSlice";
 
 export default function CardPage() {
-  const [search, setSearch] = useState("");
-  const [archetype, setArchetype] = useState("");
-  const [sort, setSort] = useState("DESC");
-  const [page, setPage] = useState(1);
-
   // Pemakaian redux
-  const cards = useSelector((state) => state.cards.cards);
-  const pagination = useSelector((state) => state.cards.pagination);
-  const archetypes = useSelector((state) => state.archetypes.archetypes);
+  const { cards } = useSelector((state) => state.cards);
+  const { pagination } = useSelector((state) => state.cards);
+  const { archetypes } = useSelector((state) => state.archetypes);
+  const { search, archetype, sort, page } = useSelector(
+    (state) => state.filter
+  );
 
   const dispatch = useDispatch();
   const [debouncedSearch, setDebouncedSearch] = useState(search);
@@ -151,8 +155,8 @@ export default function CardPage() {
           placeholder="Search by name..."
           value={search}
           onChange={(e) => {
-            setSearch(e.target.value);
-            setPage(1);
+            dispatch(setSearch(e.target.value));
+            dispatch(setPage(1));
           }}
           className="p-2 border border-gray-300 rounded-md"
         />
@@ -161,8 +165,8 @@ export default function CardPage() {
         <select
           value={archetype}
           onChange={(e) => {
-            setArchetype(e.target.value);
-            setPage(1);
+            dispatch(setArchetype(e.target.value));
+            dispatch(setPage(1));
           }}
           className="p-2 border border-gray-300 rounded-md"
         >
@@ -177,7 +181,7 @@ export default function CardPage() {
         {/* Sort */}
         <select
           value={sort}
-          onChange={(e) => setSort(e.target.value)}
+          onChange={(e) => dispatch(setSort(e.target.value))}
           className="p-2 border border-gray-300 rounded-md"
         >
           <option value="asc">Sort by Level (Ascending)</option>
@@ -214,7 +218,9 @@ export default function CardPage() {
           {pagination.currentPage > 1 && (
             <li className="dark:text-neutral-300">
               <button
-                onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
+                onClick={() =>
+                  dispatch(setPage((prev) => Math.max(prev - 1, 1)))
+                }
                 className="px-4 py-2 border border-gray-300 rounded-md"
               >
                 Previous
@@ -243,7 +249,7 @@ export default function CardPage() {
                     : "dark:text-neutral-300"
                 }`}
               >
-                <button onClick={() => setPage(item)}>{item}</button>
+                <button onClick={() => dispatch(setPage(item))}>{item}</button>
               </li>
             );
           })}
@@ -253,7 +259,9 @@ export default function CardPage() {
             <li className="dark:text-neutral-300">
               <button
                 onClick={() =>
-                  setPage((prev) => Math.min(prev + 1, pagination.totalPages))
+                  dispatch(
+                    setPage((prev) => Math.min(prev + 1, pagination.totalPages))
+                  )
                 }
                 className="px-4 py-2 border border-gray-300 rounded-md"
               >
