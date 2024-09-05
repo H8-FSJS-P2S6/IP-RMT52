@@ -7,7 +7,12 @@ export default function RootLayout() {
     <>
       <Navbar />
       {localStorage.getItem("access_token") && <Sidebar />}
-      <div className="container-2xl w-full mt-16 sm:pl-64 min-w-[524px]">
+      <div
+        className={`container-2xl w-full mt-16 min-w-[524px] ${
+          localStorage.getItem("access_token") ? "sm:pl-64" : ""
+        }
+        )}`}
+      >
         <Outlet />
       </div>
     </>
