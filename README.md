@@ -19,6 +19,7 @@ Routes below need authentication:
 - DELETE /cards/favorite/delete/:favoriteId
 - GET /archetype
 - GET /randomcard
+- GET /minigames
 
 ## 1. POST /register
 
@@ -575,6 +576,51 @@ _Response (200 - OK)_
     "level": "number",
     "attribute": "string",
     "rarity": "string"
+  },
+  ...
+]
+```
+
+_Response (401 - Unauthorized)_
+
+```json
+{
+  "message": "Invalid token"
+}
+```
+
+_Response (500 - Internal Server Error)_
+
+```json
+{
+  "message": "Internal Server Error"
+}
+```
+
+## 11. GET /minigames
+
+Description:
+
+- Get one random card from database with hint from openAI
+
+Request:
+
+- headers:
+
+```json
+{
+  "Authorization": "Bearer <access_token>"
+}
+```
+
+_Response (200 - OK)_
+
+```json
+[
+  {
+    "name": "string",
+    "cardName": "string",
+    "cardImage": "string",
   },
   ...
 ]
