@@ -14,6 +14,7 @@ Routes below need authentication:
 
 - GET /cards
 - GET /cards/favorite
+- GET /cards/favorite/:id
 - GET /cards/:id
 - POST /cards/favorite/add/:cardId
 - PUT /cards/favorite/edit/:favoriteId
@@ -275,7 +276,58 @@ _Response (500 - Internal Server Error)_
 }
 ```
 
-## 6. GET /cards/:id
+## 6. GET /cards/favorite
+
+Description:
+
+- Get one favorite cards based on user
+  Request:
+- headers:
+
+```json
+{
+  "Authorization": "Bearer <access_token>"
+}
+```
+
+_Response (200 - OK)_
+
+```json
+{
+  "id": "number",
+  "userId": "number",
+  "cardId": "number",
+  "stock": "number",
+  "createdAt": "string",
+  "updatedAt": "string"
+}
+```
+
+_Response (401 - Unauthorized)_
+
+```json
+{
+  "message": "Invalid token"
+}
+```
+
+_Response (404 - Not Found)_
+
+```json
+{
+  "message": "Favorite Card not found"
+}
+```
+
+_Response (500 - Internal Server Error)_
+
+```json
+{
+  "message": "Internal Server Error"
+}
+```
+
+## 7. GET /cards/:id
 
 Description:
 
@@ -333,7 +385,7 @@ _Response (500 - Internal Server Error)_
 }
 ```
 
-## 7. POST /cards/favorite/add/:cardId
+## 8. POST /cards/favorite/add/:cardId
 
 Description:
 
@@ -394,7 +446,7 @@ _Response (500 - Internal Server Error)_
 }
 ```
 
-## 8. PUT /cards/favorite/edit/:favoriteId
+## 9. PUT /cards/favorite/edit/:favoriteId
 
 Description:
 
@@ -466,7 +518,7 @@ _Response (500 - Internal Server Error)_
 }
 ```
 
-## 9. DELETE /cards/favorite/delete/:favoriteId
+## 10. DELETE /cards/favorite/delete/:favoriteId
 
 Description:
 
@@ -522,7 +574,7 @@ _Response (500 - Internal Server Error)_
 }
 ```
 
-## 10. GET /archetype
+## 11. GET /archetype
 
 Description:
 
@@ -565,7 +617,7 @@ _Response (500 - Internal Server Error)_
 }
 ```
 
-## 11. GET /randomcard
+## 12. GET /randomcard
 
 Description:
 
@@ -620,7 +672,7 @@ _Response (500 - Internal Server Error)_
 }
 ```
 
-## 12. GET /minigames
+## 13. GET /minigames
 
 Description:
 
