@@ -1,4 +1,4 @@
-const OpenAI = require("openai"); // Gunakan require jika menggunakan CommonJS
+const OpenAI = require("openai");
 require("dotenv").config();
 
 module.exports = async function openAI(card) {
