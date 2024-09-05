@@ -7,11 +7,14 @@ import { setArchetypes } from "../features/card/archetypesSlice";
 import { setCards } from "../features/card/cardsSlice";
 import { setPage } from "../features/card/filterSlice";
 import Filter from "../components/Filter";
+import { setLoader } from "../features/loader/loaderSlice";
+import Loader from "../components/Loader";
 
 export default function CardPage() {
   // Pemakaian redux
   const { cards } = useSelector((state) => state.cards);
   const { pagination } = useSelector((state) => state.cards);
+  const { loader } = useSelector((state) => state.loader);
 
   const { search, archetype, sort, page } = useSelector(
     (state) => state.filter
@@ -38,6 +41,7 @@ export default function CardPage() {
     url.searchParams.append("sort", sort);
 
     try {
+      dispatch(setLoader(true));
       const response = await axios.get(url.toString(), {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("access_token")}`,
@@ -61,6 +65,8 @@ export default function CardPage() {
         text: err.response.data.message,
       });
       console.log(err, "<<< e - fetchCards");
+    } finally {
+      dispatch(setLoader(false));
     }
   };
 
@@ -143,90 +149,98 @@ export default function CardPage() {
 
   return (
     <div className="p-4">
-      <Filter />
-
-      {/* Card List */}
-      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 w-full">
-        {cards.length > 0 ? (
-          cards.map((card) => (
-            <div key={card.id} className="flex">
-              <Link to={`/cards/${card.id}`}>
-                <img
-                  src={card.image_url}
-                  alt={card.name}
-                  className="w-full h-auto"
-                />
-              </Link>
-            </div>
-          ))
-        ) : (
-          <p>No cards found.</p>
-        )}
-      </div>
-
-      {/* Pagination */}
-      <nav
-        aria-label="Page navigation example"
-        className="py-3 m-auto flex justify-center"
-      >
-        <ul className="flex items-center space-x-2">
-          {/* Previous Button */}
-          {pagination.currentPage > 1 && (
-            <li className="dark:text-neutral-300">
-              <button
-                onClick={() =>
-                  dispatch(setPage((prev) => Math.max(prev - 1, 1)))
-                }
-                className="px-4 py-2 border border-gray-300 rounded-md"
-              >
-                Previous
-              </button>
-            </li>
-          )}
-
-          {/* Page Numbers */}
-          {getPaginationRange().map((item, index) => {
-            if (item === "...") {
-              return (
-                <li
-                  key={index}
-                  className="px-4 py-2 border border-gray-300 rounded-md dark:text-neutral-300"
-                >
-                  {item}
+      {loader ? (
+        <Loader />
+      ) : (
+        <>
+          <Filter />
+          {/* Card List */}
+          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 w-full">
+            {cards.length > 0 ? (
+              cards.map((card) => (
+                <div key={card.id} className="flex">
+                  <Link to={`/cards/${card.id}`}>
+                    <img
+                      src={card.image_url}
+                      alt={card.name}
+                      className="w-full h-auto"
+                    />
+                  </Link>
+                </div>
+              ))
+            ) : (
+              <p>No cards found.</p>
+            )}
+          </div>
+          {/* Pagination */}
+          <nav
+            aria-label="Page navigation example"
+            className="py-3 m-auto flex justify-center"
+          >
+            <ul className="flex items-center space-x-2">
+              {/* Previous Button */}
+              {pagination.currentPage > 1 && (
+                <li className="dark:text-neutral-300">
+                  <button
+                    onClick={() =>
+                      dispatch(setPage((prev) => Math.max(prev - 1, 1)))
+                    }
+                    className="px-4 py-2 border border-gray-300 rounded-md"
+                  >
+                    Previous
+                  </button>
                 </li>
-              );
-            }
-            return (
-              <li
-                key={index}
-                className={`px-4 py-2 border border-gray-300 rounded-md ${
-                  item === pagination.currentPage
-                    ? "bg-blue-500 text-white"
-                    : "dark:text-neutral-300"
-                }`}
-              >
-                <button onClick={() => dispatch(setPage(item))}>{item}</button>
-              </li>
-            );
-          })}
+              )}
 
-          {/* Next Button */}
-          {pagination.currentPage < pagination.totalPages && (
-            <li className="dark:text-neutral-300">
-              <button
-                onClick={() =>
-                  dispatch(
-                    setPage((prev) => Math.min(prev + 1, pagination.totalPages))
-                  )
+              {/* Page Numbers */}
+              {getPaginationRange().map((item, index) => {
+                if (item === "...") {
+                  return (
+                    <li
+                      key={index}
+                      className="px-4 py-2 border border-gray-300 rounded-md dark:text-neutral-300"
+                    >
+                      {item}
+                    </li>
+                  );
                 }
-                className="px-4 py-2 border border-gray-300 rounded-md"
-              >
-                Next
-              </button>
-            </li>
-          )}
-        </ul>
-      </nav>
+                return (
+                  <li
+                    key={index}
+                    className={`px-4 py-2 border border-gray-300 rounded-md ${
+                      item === pagination.currentPage
+                        ? "bg-blue-500 text-white"
+                        : "dark:text-neutral-300"
+                    }`}
+                  >
+                    <button onClick={() => dispatch(setPage(item))}>
+                      {item}
+                    </button>
+                  </li>
+                );
+              })}
+
+              {/* Next Button */}
+              {pagination.currentPage < pagination.totalPages && (
+                <li className="dark:text-neutral-300">
+                  <button
+                    onClick={() =>
+                      dispatch(
+                        setPage((prev) =>
+                          Math.min(prev + 1, pagination.totalPages)
+                        )
+                      )
+                    }
+                    className="px-4 py-2 border border-gray-300 rounded-md"
+                  >
+                    Next
+                  </button>
+                </li>
+              )}
+            </ul>
+          </nav>
+        </>
+      )}
     </div>
   );
 }
