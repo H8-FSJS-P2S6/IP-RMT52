@@ -8,6 +8,7 @@ List of available endpoints:
 
 - POST /register
 - POST /login
+- POST /login/google
 
 Routes below need authentication:
 
@@ -121,7 +122,29 @@ _Response (500 - Internal Server Error)_
 }
 ```
 
-## 3. GET /cards
+## 3. POST /login/google
+
+Description:
+
+- Login to Application via Google
+
+_Response (200 - OK)_
+
+```json
+{
+  "access_token": "string"
+}
+```
+
+_Response (500 - Internal Server Error)_
+
+```json
+{
+  "message": "Internal Server Error"
+}
+```
+
+## 4. GET /cards
 
 Description:
 
@@ -197,7 +220,7 @@ _Response (500 - Internal Server Error)_
 }
 ```
 
-## 4. GET /cards/favorite
+## 5. GET /cards/favorite
 
 Description:
 
@@ -252,7 +275,7 @@ _Response (500 - Internal Server Error)_
 }
 ```
 
-## 5. GET /cards/:id
+## 6. GET /cards/:id
 
 Description:
 
@@ -310,7 +333,7 @@ _Response (500 - Internal Server Error)_
 }
 ```
 
-## 6. POST /cards/favorite/add/:cardId
+## 7. POST /cards/favorite/add/:cardId
 
 Description:
 
@@ -371,7 +394,7 @@ _Response (500 - Internal Server Error)_
 }
 ```
 
-## 7. PUT /cards/favorite/edit/:favoriteId
+## 8. PUT /cards/favorite/edit/:favoriteId
 
 Description:
 
@@ -443,7 +466,7 @@ _Response (500 - Internal Server Error)_
 }
 ```
 
-## 8. DELETE /cards/favorite/delete/:favoriteId
+## 9. DELETE /cards/favorite/delete/:favoriteId
 
 Description:
 
@@ -499,7 +522,7 @@ _Response (500 - Internal Server Error)_
 }
 ```
 
-## 9. GET /archetype
+## 10. GET /archetype
 
 Description:
 
@@ -542,7 +565,7 @@ _Response (500 - Internal Server Error)_
 }
 ```
 
-## 10. GET /randomcard
+## 11. GET /randomcard
 
 Description:
 
@@ -597,7 +620,7 @@ _Response (500 - Internal Server Error)_
 }
 ```
 
-## 11. GET /minigames
+## 12. GET /minigames
 
 Description:
 
