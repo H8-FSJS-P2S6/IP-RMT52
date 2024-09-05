@@ -255,6 +255,40 @@ describe("GET /cards/favorite", () => {
   });
 });
 
+describe("GET /cards/favorite/:id", () => {
+  test("200 success GET one favorite card", async () => {
+    const response = await request(app)
+      .get("/cards/favorite/1")
+      .set("Authorization", `Bearer ${access_token}`);
+
+    expect(response.status).toBe(200);
+    expect(response.body).toHaveProperty("id", expect.any(Number));
+    expect(response.body).toHaveProperty("userId", expect.any(Number));
+    expect(response.body).toHaveProperty("cardId", expect.any(Number));
+  });
+
+  test("401 GET favorite card with invalid token", async () => {
+    const response = await request(app)
+      .get("/cards/favorite/1")
+      .set(
+        "Authorization",
+        `Bearer ${access_token.substring(1, access_token.length)}`
+      );
+
+    expect(response.status).toBe(401);
+    expect(response.body).toHaveProperty("message", "Invalid token");
+  });
+
+  test("404 GET one favorite card with invalid id", async () => {
+    const response = await request(app)
+      .get("/cards/favorite/3")
+      .set("Authorization", `Bearer ${access_token}`);
+
+    expect(response.status).toBe(404);
+    expect(response.body).toHaveProperty("message", "Favorite Card not found");
+  });
+});
+
 describe("PUT /cards/favorite/edit/:favoriteId", () => {
   test("200 success PUT favorite card", async () => {
     const response = await request(app)
