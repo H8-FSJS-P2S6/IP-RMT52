@@ -99,7 +99,7 @@ export default function FavoritePage() {
             </div>
           ))
         ) : (
-          <p>No favorite cards found.</p>
+          <p className="dark:text-white">No favorite cards found.</p>
         )}
       </div>
     </div>
