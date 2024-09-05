@@ -1,15 +1,11 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { baseUrl } from "../helper/baseUrl";
 import Swal from "sweetalert2";
-import { useDispatch, useSelector } from "react-redux";
-import { setEmail } from "../features/user/emailSlice";
-import { setPassword } from "../features/user/passwordSlice";
 
 export default function LoginPage() {
-  const email = useSelector((state) => state.email.email);
-  const password = useSelector((state) => state.password.password);
-  const dispatch = useDispatch();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
@@ -104,7 +100,7 @@ export default function LoginPage() {
               placeholder=" "
               required=""
               value={email}
-              onChange={(e) => dispatch(setEmail(e.target.value))}
+              onChange={(e) => setEmail(e.target.value)}
             />
             <label
               htmlFor="floating_email"
@@ -122,7 +118,7 @@ export default function LoginPage() {
               placeholder=" "
               required=""
               value={password}
-              onChange={(e) => dispatch(setPassword(e.target.value))}
+              onChange={(e) => setPassword(e.target.value)}
             />
             <label
               htmlFor="floating_password"

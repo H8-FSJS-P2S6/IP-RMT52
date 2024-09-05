@@ -1,17 +1,13 @@
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { baseUrl } from "../helper/baseUrl";
 import Swal from "sweetalert2";
-import { useDispatch, useSelector } from "react-redux";
-import { setEmail } from "../features/user/emailSlice";
-import { setPassword } from "../features/user/passwordSlice";
-import { setUsername } from "../features/user/usernameSlice";
 
 export default function RegisterPage() {
-  const username = useSelector((state) => state.username.username);
-  const email = useSelector((state) => state.email.email);
-  const password = useSelector((state) => state.password.password);
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const handleOnRegister = async (e) => {
@@ -22,6 +18,10 @@ export default function RegisterPage() {
         email,
         password,
       });
+
+      setUsername("");
+      setEmail("");
+      setPassword("");
       navigate("/login");
     } catch (err) {
       Swal.fire({
@@ -49,7 +49,7 @@ export default function RegisterPage() {
               placeholder=" "
               required=""
               value={username}
-              onChange={(e) => dispatch(setUsername(e.target.value))}
+              onChange={(e) => setUsername(e.target.value)}
             />
             <label
               htmlFor="username"
@@ -67,7 +67,7 @@ export default function RegisterPage() {
               placeholder=" "
               required=""
               value={email}
-              onChange={(e) => dispatch(setEmail(e.target.value))}
+              onChange={(e) => setEmail(e.target.value)}
             />
             <label
               htmlFor="floating_email"
@@ -85,7 +85,7 @@ export default function RegisterPage() {
               placeholder=" "
               required=""
               value={password}
-              onChange={(e) => dispatch(setPassword(e.target.value))}
+              onChange={(e) => setPassword(e.target.value)}
             />
             <label
               htmlFor="floating_password"
