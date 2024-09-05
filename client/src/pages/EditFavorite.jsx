@@ -1,10 +1,12 @@
-import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { baseUrl } from "../helper/baseUrl";
 import Swal from "sweetalert2";
+import { useDispatch, useSelector } from "react-redux";
+import { setStock } from "../features/card/stockSlicer";
 
 export default function EditFavorite() {
-  const [stock, setStock] = useState("");
+  const stock = useSelector((state) => state.stock.stock);
+  const dispatch = useDispatch();
   const { favoriteId } = useParams();
   const navigate = useNavigate();
 
@@ -55,7 +57,7 @@ export default function EditFavorite() {
             placeholder=" "
             required=""
             value={stock}
-            onChange={(e) => setStock(Number(e.target.value))}
+            onChange={(e) => dispatch(setStock(Number(e.target.value)))}
           />
           <label
             htmlFor="floating_stock"
