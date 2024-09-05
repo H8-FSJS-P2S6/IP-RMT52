@@ -6,7 +6,7 @@ module.exports = async function openAI(card) {
     apiKey: process.env.OPENAI_API_KEY,
   });
 
-  const prompt = `Give a hint about this Yu-Gi-Oh card based on its description:\n\nCard Name: ${card.name}\nDescription: ${card.desc}\nCardType: ${card.cardtype}\nRace: ${card.race}\nAttribute: ${card.attribute}\n\nGenerate a hint without revealing the card name.`;
+  const prompt = `Give a hint about this Yu-Gi-Oh card based on its description:\n\nCard Name: ${card.name}\nDescription: ${card.desc}\nCardType: ${card.cardtype}\nRace: ${card.race}\nAttribute: ${card.attribute}\nAttack: ${card.atk}\bDefense: ${card.def}\nLevel: ${card.level}\n\nGenerate a hint without revealing the card name. But you can reveal a partial of the name`;
 
   try {
     const completion = await openai.chat.completions.create({
