@@ -14,7 +14,13 @@ export default function MinigamesPage() {
           Authorization: `Bearer ${localStorage.getItem("access_token")}`,
         },
       });
-      setQuiz(response.data);
+      setQuiz((quiz) => {
+        if (!quiz) {
+          return response.data;
+        } else {
+          return quiz;
+        }
+      });
     } catch (err) {
       console.log(err, "<< err - fetchQuiz");
     }
@@ -31,7 +37,6 @@ export default function MinigamesPage() {
       setFeedback("Incorrect. Try again!");
     }
     setGuess("");
-    // Optionally, fetch a new quiz here
   };
 
   const toggleHintVisibility = () => {
