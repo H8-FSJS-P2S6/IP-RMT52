@@ -358,9 +358,34 @@ describe("GET /randomcard", () => {
     expect(response.body).toHaveProperty("desc", expect.any(String));
   });
 
-  test("401 get archetype with invalid token", async () => {
+  test("401 get randomcard with invalid token", async () => {
     const response = await request(app)
       .get("/randomcard")
+      .set(
+        "Authorization",
+        `Bearer ${access_token.substring(1, access_token.length)}`
+      );
+
+    expect(response.status).toBe(401);
+    expect(response.body).toHaveProperty("message", "Invalid token");
+  });
+});
+
+describe("GET /minigames", () => {
+  test("200 success get minigames", async () => {
+    const response = await request(app)
+      .get("/minigames")
+      .set("Authorization", `Bearer ${access_token}`);
+
+    expect(response.status).toBe(200);
+    expect(response.body).toHaveProperty("hint", expect.any(String));
+    expect(response.body).toHaveProperty("cardName", expect.any(String));
+    expect(response.body).toHaveProperty("cardImage", expect.any(String));
+  });
+
+  test("401 get minigames with invalid token", async () => {
+    const response = await request(app)
+      .get("/minigames")
       .set(
         "Authorization",
         `Bearer ${access_token.substring(1, access_token.length)}`
