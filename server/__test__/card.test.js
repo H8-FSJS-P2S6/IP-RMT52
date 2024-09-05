@@ -185,7 +185,7 @@ describe("GET /cards/:id", () => {
 describe("POST /cards/favorite/add/:cardId", () => {
   test("200 success POST favorite card", async () => {
     const response = await request(app)
-      .post("/cards/favorite/add/23771716")
+      .post("/cards/favorite/add/36693940")
       .set("Authorization", `Bearer ${access_token}`);
 
     expect(response.status).toBe(200);
@@ -197,7 +197,7 @@ describe("POST /cards/favorite/add/:cardId", () => {
 
   test("403 can't POST the same card to favorite", async () => {
     const response = await request(app)
-      .post("/cards/favorite/add/23771716")
+      .post("/cards/favorite/add/36693940")
       .set("Authorization", `Bearer ${access_token}`);
 
     expect(response.status).toBe(403);
@@ -259,11 +259,26 @@ describe("PUT /cards/favorite/edit/:favoriteId", () => {
   test("200 success PUT favorite card", async () => {
     const response = await request(app)
       .put("/cards/favorite/edit/1")
-      .set("Authorization", `Bearer ${access_token}`);
+      .set("Authorization", `Bearer ${access_token}`)
+      .send({
+        stock: 1,
+      });
 
     expect(response.status).toBe(200);
     expect(response.body).toHaveProperty("data");
     expect(response.body).toHaveProperty("message", "Stock updated");
+  });
+
+  test("400 PUT stock can't be negative", async () => {
+    const response = await request(app)
+      .put("/cards/favorite/edit/1")
+      .set("Authorization", `Bearer ${access_token}`)
+      .send({
+        stock: -1,
+      });
+
+    expect(response.status).toBe(400);
+    expect(response.body).toHaveProperty("message", "Stock cannot be negative");
   });
 
   test("401 PUT favorite card with invalid token", async () => {
@@ -272,7 +287,10 @@ describe("PUT /cards/favorite/edit/:favoriteId", () => {
       .set(
         "Authorization",
         `Bearer ${access_token.substring(1, access_token.length)}`
-      );
+      )
+      .send({
+        stock: 3,
+      });
 
     expect(response.status).toBe(401);
     expect(response.body).toHaveProperty("message", "Invalid token");
@@ -281,7 +299,10 @@ describe("PUT /cards/favorite/edit/:favoriteId", () => {
   test("404 PUT favorite card with invalid id card", async () => {
     const response = await request(app)
       .put("/cards/favorite/edit/5")
-      .set("Authorization", `Bearer ${access_token}`);
+      .set("Authorization", `Bearer ${access_token}`)
+      .send({
+        stock: 3,
+      });
 
     expect(response.status).toBe(404);
     expect(response.body).toHaveProperty("message", "Favorite Card not found");
@@ -289,7 +310,7 @@ describe("PUT /cards/favorite/edit/:favoriteId", () => {
 });
 
 describe("DELETE /cards/favorite/delete/:favoriteId", () => {
-  test("404 PUT favorite card with invalid id card", async () => {
+  test("404 DELETE favorite card with invalid id card", async () => {
     const response = await request(app)
       .delete("/cards/favorite/delete/5")
       .set("Authorization", `Bearer ${access_token}`);
@@ -298,7 +319,7 @@ describe("DELETE /cards/favorite/delete/:favoriteId", () => {
     expect(response.body).toHaveProperty("message", "Favorite Card not found");
   });
 
-  test("200 success PUT favorite card", async () => {
+  test("200 success DELETE favorite card", async () => {
     const response = await request(app)
       .delete("/cards/favorite/delete/1")
       .set("Authorization", `Bearer ${access_token}`);
@@ -307,7 +328,7 @@ describe("DELETE /cards/favorite/delete/:favoriteId", () => {
     expect(response.body).toHaveProperty("message", "Favorite Card deleted");
   });
 
-  test("401 PUT favorite card with invalid token", async () => {
+  test("401 DELETE favorite card with invalid token", async () => {
     const response = await request(app)
       .delete("/cards/favorite/delete/1")
       .set(
