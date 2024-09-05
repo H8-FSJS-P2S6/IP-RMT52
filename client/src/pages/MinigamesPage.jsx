@@ -1,8 +1,12 @@
 import { useState, useEffect } from "react";
 import { baseUrl } from "../helper/baseUrl";
+import { useDispatch, useSelector } from "react-redux";
+import { setQuiz } from "../features/quiz/quizSlice";
 
 export default function MinigamesPage() {
-  const [quiz, setQuiz] = useState(null);
+  const quiz = useSelector((state) => state.quiz.quiz);
+  const dispatch = useDispatch();
+
   const [guess, setGuess] = useState("");
   const [feedback, setFeedback] = useState("");
   const [hintVisible, setHintVisible] = useState(false);
@@ -14,13 +18,7 @@ export default function MinigamesPage() {
           Authorization: `Bearer ${localStorage.getItem("access_token")}`,
         },
       });
-      setQuiz((quiz) => {
-        if (!quiz) {
-          return response.data;
-        } else {
-          return quiz;
-        }
-      });
+      dispatch(setQuiz(response.data));
     } catch (err) {
       console.log(err, "<< err - fetchQuiz");
     }

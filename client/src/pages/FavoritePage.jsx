@@ -1,11 +1,13 @@
-import { useState } from "react";
 import { baseUrl } from "../helper/baseUrl";
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
+import { useDispatch, useSelector } from "react-redux";
+import { setFavorites } from "../features/card/favoriteSlice";
 
 export default function FavoritePage() {
-  const [favorites, setFavorites] = useState([]);
+  const favorites = useSelector((state) => state.favorite.favorites);
+  const dispatch = useDispatch();
 
   const fetchFavorites = async () => {
     try {
@@ -15,7 +17,7 @@ export default function FavoritePage() {
         },
       });
 
-      setFavorites(favoritesResponse.data);
+      dispatch(setFavorites(favoritesResponse.data));
     } catch (err) {
       Swal.fire({
         icon: "error",
