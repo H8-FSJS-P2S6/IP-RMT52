@@ -97,21 +97,26 @@ export default function FavoritePage() {
                   <p className="dark:text-white text-center my-3">
                     Stock: {favorite.stock}
                   </p>
-                  <Link to={`/cards/favorite/edit/${favorite.favoriteId}`}>
-                    <button className="my-2 px-4 py-2 rounded-md dark:text-yellow-700 text-yellow-200 dark:bg-yellow-100 dark:hover:bg-yellow-300 bg-yellow-700 hover:bg-yellow-500 w-full transition duration-300 ease-in-out">
-                      Update
+                  <div className="flex space-x-4">
+                    <Link
+                      to={`/cards/favorite/edit/${favorite.favoriteId}`}
+                      className="w-full"
+                    >
+                      <button className="px-4 py-2 rounded-md dark:text-yellow-700 text-yellow-200 dark:bg-yellow-100 dark:hover:bg-yellow-300 bg-yellow-700 hover:bg-yellow-500 w-full transition duration-300 ease-in-out">
+                        Update
+                      </button>
+                    </Link>
+                    <button
+                      className="px-4 py-2 rounded-md dark:text-red-700 text-red-200 dark:bg-red-100 dark:hover:bg-red-300 bg-red-700 hover:bg-red-500 w-full transition duration-300 ease-in-out"
+                      onClick={() => handleOnDelete(favorite.favoriteId)}
+                    >
+                      Delete
                     </button>
-                  </Link>
-                  <button
-                    className="px-4 py-2 rounded-md dark:text-red-700 text-red-200 dark:bg-red-100 dark:hover:bg-red-300 bg-red-700 hover:bg-red-500 w-full transition duration-300 ease-in-out"
-                    onClick={() => handleOnDelete(favorite.favoriteId)}
-                  >
-                    Delete
-                  </button>
+                  </div>
                 </div>
               ))
             ) : (
-              <p className="dark:text-white">No favorite cards found.</p>
+              <p className="dark:text-white flex justify-center text-lg">No favorite cards found.</p>
             )}
           </div>
         </>
