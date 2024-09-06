@@ -65,7 +65,7 @@ export default function MinigamesPage() {
             <img
               src={quiz.cardImage}
               alt="Card"
-              className="w-50 h-auto border rounded-md shadow-md"
+              className="w-1/3 h-auto border rounded-md shadow-md"
             />
           </div>
           <button
