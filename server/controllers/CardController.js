@@ -173,6 +173,7 @@ class CardController {
       const responseServer = response.data.data[0];
       const sameCard = await Favorite.findOne({
         where: {
+          userId: req.user.id,
           cardId: responseServer.id,
         },
       });
