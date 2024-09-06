@@ -50,7 +50,12 @@ export default function MinigamesPage() {
     dispatch(toggleHintVisibility());
   };
 
-  if (!quiz) return <p>Loading...</p>;
+  if (!quiz)
+    return (
+      <div className="p-4">
+        <Loader />;
+      </div>
+    );
 
   return (
     <div className="p-4">
