@@ -149,11 +149,11 @@ export default function CardPage() {
 
   return (
     <div className="p-4">
+      <Filter />
       {loader ? (
         <Loader />
       ) : (
         <>
-          <Filter />
           {/* Card List */}
           <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 w-full">
             {cards.length > 0 ? (
