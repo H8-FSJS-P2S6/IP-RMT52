@@ -1,0 +1,219 @@
+
+1. Tabel User
+id	name	       email	              password      role
+1	Alice	       alice@example.com	pass123       admin
+2	Bob	       bob@example.com	pass456       user
+3	Charlie	charlie@example.com	pass789       user
+
+2. Tabel Monster
+id	name	   types	species	description imgUrl
+1	Dragon	   Fire	Dragon	       A fire-breathing dragon  www.qwe.com/1
+2	Goblin	   Earth	Goblin	       A small, mischievous creature  www.asd.com/2
+3	Phoenix   Fire/Air	Phoenix	A mythical bird that regenerates  www.zxc.com/3
+
+3. Tabel UserFavorite
+userId	       monsterId
+1	       1
+1	       2
+2	       1
+3	       2
+
+npx sequelize db:create
+
+npx sequelize-cli model:generate --name User --attributes username:string,email:string,password:string,role:string
+npx sequelize-cli model:generate --name Monster --attributes type:string,species:string,name:string,description:string,imgUrl:string
+npx sequelize-cli model:generate --name UserFavorite --attributes userId:integer,monsterId:integer
+
+npx sequelize db:migrate
+npx sequelize db:migrate:undo:all
+
+npx sequelize-cli seed:generate --name seed-User
+npx sequelize-cli seed:generate --name seed-Monster
+npx sequelize-cli seed:generate --name seed-UserFavorite
+
+npx sequelize db:seed:all
+
+endpoint
+post /login
+get /monster
+get /monster/:id
+
+get /user/:id/favorites
+post /user/:id/favorites
+del /user/:id/favorites/:id
+
+get /favorites/:userId
+post /favorites
+del /favorites/:userId/:monsterId
+
+
+
+
+
+
+
+
+
+
+const { UserFavorite, Monster, User } = require("../models");
+
+module.exports = class UserFavoriteController {
+  // Method untuk mendapatkan monster favorit pengguna
+  static async getFavMonster(req, res, next) {
+    const { userId } = req.params;
+
+    try {
+      // Cek apakah pengguna ada
+      const user = await User.findByPk(userId);
+      if (!user) {
+        return next({ name: "NotFound", message: `User id:${userId} not found` });
+      }
+
+      // Dapatkan daftar monster favorit pengguna
+      const favorites = await UserFavorite.findAll({
+        where: { userId },
+        include: [Monster]  // Menghubungkan dengan tabel Monster
+      });
+
+      res.status(200).json(favorites);
+    } catch (err) {
+      console.log(err, "<<< err getFavMonster");
+      next(err);
+    }
+  }
+
+  // Method untuk menambahkan monster favorit pengguna
+  static async addFavMonster(req, res, next) {
+    const { userId } = req.params;
+    const { monsterId } = req.body;
+
+    try {
+      // Cek apakah pengguna dan monster ada
+      const user = await User.findByPk(userId);
+      const monster = await Monster.findByPk(monsterId);
+
+      if (!user) {
+        return next({ name: "NotFound", message: `User id:${userId} not found` });
+      }
+      if (!monster) {
+        return next({ name: "NotFound", message: `Monster id:${monsterId} not found` });
+      }
+
+      // Tambahkan data favorit
+      await UserFavorite.create({ userId, monsterId });
+      res.status(201).json({ message: 'Favorite monster added successfully' });
+    } catch (err) {
+      console.log(err, "<<< err addFavMonster");
+      next(err);
+    }
+  }
+
+  // Method untuk menghapus monster favorit pengguna
+  static async delFavMonster(req, res, next) {
+    const { userId, monsterId } = req.params;
+
+    try {
+      // Cek apakah pengguna dan monster ada
+      const user = await User.findByPk(userId);
+      const monster = await Monster.findByPk(monsterId);
+
+      if (!user) {
+        return next({ name: "NotFound", message: `User id:${userId} not found` });
+      }
+      if (!monster) {
+        return next({ name: "NotFound", message: `Monster id:${monsterId} not found` });
+      }
+
+      // Hapus data favorit
+      const result = await UserFavorite.destroy({
+        where: { userId, monsterId }
+      });
+
+      if (result === 0) {
+        return next({ name: "NotFound", message: `Favorite not found` });
+      }
+
+      res.status(200).json({ message: 'Favorite monster deleted successfully' });
+    } catch (err) {
+      console.log(err, "<<< err delFavMonster");
+      next(err);
+    }
+  }
+};
+
+
+"use strict";
+
+const axios = require("axios");
+
+/** @type {import('sequelize-cli').Migration} */
+module.exports = {
+  async up(queryInterface, Sequelize) {
+    try {
+      const response = await axios.get("https://mhw-db.com/monsters/");
+      const monster = response.data;
+      const data = monster.map((e) => ({
+        id: e.id,
+        name: e.name,
+        type: e.type,
+        species: e.species,
+        description: e.description,
+        elements: JSON.stringify(e.elements), // Convert array to JSON string
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      }));
+
+      await queryInterface.bulkInsert("Monsters", data, {});
+    } catch (err) {
+      console.log(err, "<<< seeding monster");
+    }
+  },
+
+  async down(queryInterface, Sequelize) {
+    await queryInterface.bulkDelete("Monsters", null, {});
+  },
+};
+
+module.exports = {
+  async up(queryInterface, Sequelize) {
+    await queryInterface.createTable('Monsters', {
+      id: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        primaryKey: true,
+      },
+      name: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+      type: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+      species: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+      description: {
+        type: Sequelize.TEXT,
+        allowNull: true,
+      },
+      elements: {
+        type: Sequelize.TEXT, // Use TEXT for JSON strings
+        allowNull: true,
+      },
+      createdAt: {
+        type: Sequelize.DATE,
+        allowNull: false,
+      },
+      updatedAt: {
+        type: Sequelize.DATE,
+        allowNull: false,
+      },
+    });
+  },
+
+  async down(queryInterface, Sequelize) {
+    await queryInterface.dropTable('Monsters');
+  },
+};

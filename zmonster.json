@@ -1,0 +1,29 @@
+[
+  {
+    "type": "large",
+    "species": "flying wyvern",
+    "name": "Bazelgeuse",
+    "description": "A nefarious flying wyvern that travels the New World in search of prey. It scatters explosive scales over a wide area to prey on whatever gets caught in the blast."
+  },
+  {
+    "type": "large",
+    "species": "elder dragon",
+    "name": "Safi'jiiva",
+    "description": "The fully-grown form of Xeno'jiiva. It absorbs energy from its environment to heal itself and change the ecosystem."
+  }
+]
+
+[
+
+  {
+    "id": 55,
+    "type": "large",
+    "species": "elder dragon",
+    "elements": [
+        "fire",
+        "dragon"
+    ],
+    "name": "Safi'jiiva",
+    "description": "The fully-grown form of Xeno'jiiva. It absorbs energy from its environment to heal itself and change the ecosystem."
+  }
+]
